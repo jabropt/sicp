@@ -45,3 +45,38 @@
 
 ;; (trace (test 0 (p)))
 ;; 作用的順序では、無限ループ。正規順序では、0が返る。
+
+;; Newton法による平方根
+;; (define (sqrt-iter guess x)
+;;   (if (good-enough? guess x)
+;;       guess
+;;       (sqrt-iter (improve guess x)
+;;                  x)))
+
+;; (define (improve guess x)
+;;   (avarage guess (/ x guess)))
+
+;; (define (avarage x y)
+;;   (/ ( + x y) 2))
+
+;; (define (good-enough? guess x)
+;;   (< (abs(- (square guess) x)) 0.001))
+
+;; (define (sqrt x)
+;;   (sqrt-iter 1.0 x))
+
+Ex.1.6
+
+(define (new-if predicate then-clause else-clause)
+  (cond (predicate then-clause)
+        (else else-clause)))
+
+(define (sqrt-iter guess x)
+  (new-if (good-enough? guess x)
+          guess
+          (sqrt-iter (improve guess x)
+                     x)))
+
+;; 処理が終わらない。new-ifはifやcondなどの特殊形式と違い、ただの手続きなので、
+;; 実行時、作用的順序により、まず引数が評価される。その後もnew-ifを呼ぼうとするが、
+;; 引数が評価される繰り返しとなり、new-ifが呼ばれることはない
